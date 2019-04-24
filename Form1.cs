@@ -1385,16 +1385,16 @@ namespace CQMacroCreator
                     string[] hero = u.Split(':');
                     if (aliases.ContainsKey(hero[0].ToUpper()))
                     {
-                        result.Add(aliases[hero[0].ToUpper()] + " " + hero[1]);
+                        result.Add(aliases[hero[0].ToUpper()].ToLower() + " " + hero[1]);
                     }
                     else
                     {
-                        result.Add(hero[0] + " " + hero[1]);
+                        result.Add(hero[0].ToLower() + " " + hero[1]);
                     }
                 }
                 else
                 {
-                    result.Add(u);
+                    result.Add(u.ToLower());
                 }
             }
             return result.Aggregate((current, next) => current + " " + next);
