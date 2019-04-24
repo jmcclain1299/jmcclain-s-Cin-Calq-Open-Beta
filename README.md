@@ -1,3 +1,5 @@
+This is an open beta for a new calc that is based on the new battle system and has suppost for 2nd promotion quests. Currently doesn't do world bosses and doesn't support macro, though preparations have been done for easier integration so feel free to adapt the macro for it.
+
 Mob.H is the header file for the calculator. It has the interface for the functions
 
 Mob.cpp is the implementation file for the calculator. It has the behavoir of all the functions.
