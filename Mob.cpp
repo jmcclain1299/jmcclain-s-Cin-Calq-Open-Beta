@@ -4,6 +4,7 @@ The interface for the class Mob(and all subclasses) is in
 the header file Mob.h*/
 #include <string>
 #include <vector>
+#include "pch.h"
 #include <map>
 #include <iostream>
 #include "Mob.h"
@@ -2352,7 +2353,7 @@ doneo://once done trying all solutions/finding a winning solution
 		if (i < e.size() - 1)
 			xy << ",";
 	}
-	xy << "]},\"solution\":{\"followers\":" << selfl.lineFollowers << ",\"monsters\":[{";
+	xy << "]},\"solution\":{\"followers\":" << selfl.lineFollowers << ",\"monsters\":[";
 	for (int i = 0; i < v.size(); i++)
 	{
 		xy << "{\"id\":" << v[i].getId();

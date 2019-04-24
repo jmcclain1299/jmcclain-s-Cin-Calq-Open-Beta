@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Mob.h"
 #include <iostream>
 #include <string>
@@ -7,6 +8,8 @@
 #include <sstream> 
 using namespace std;
 using namespace jmcclain1299;
+string choice;
+int idh;
 void populate(Line& lenemy, Line& lself, int& ulimit, int& llimit, list<Mob>& heats, map<string, vector<Mob>>& q, map<string, Mob>& Heroes);//fills the pools
 int main()
 {
@@ -20,7 +23,11 @@ int main()
 	list<Mob> heatl;//list of mobs/heroes that get populated into the heat
 	map<string, vector<Mob>> quests;
 	populate(enemyline, selfa, upperlimits, lowerlimits, heatl, quests, Heromap);//Fills enemy line, and fills the heat, which is the list of mobs to choose from, with the upper and lower limits on followers
-	getResult(heatl, selfa, upperlimits, lowerlimits, enemyline);//Tries combinations of units and heroes to beat the input enemy line in setup.txt. If a solution is found, it prints it.
+	if (choice == "Promotion")
+	{
+		getPromotional(heatl, selfa, upperlimits, lowerlimits, enemyline, idh);
+	}
+	else getResult(heatl, selfa, upperlimits, lowerlimits, enemyline);//Tries combinations of units and heroes to beat the input enemy line in setup.txt. If a solution is found, it prints it.
 	cout << "Would you like to run this program again? Enter [y/n]\n";
 	cin >> run;
 	while (run != 'n' && run != 'N')
@@ -402,15 +409,17 @@ void populate(Line& lenemy, Line& lself, int& ulimit, int& llimit, list<Mob>& he
 	if (next == "Quest")
 	{
 		setup >> next;
-		lenemy = q.find(next)->second;
+		enemy = q.find(next)->second;
 		setup >> next;
 	}
 	if (next == "Promotion")
 	{
 		setup >> next;
 		Mob a = Heroes.find(next)->second;
-		lenemy = q.find(a.quest)->second;
+		enemy = q.find(a.quest)->second;
 		setup >> next;
+		choice = "Promotion";
+		idh = a.getId();
 	}
 	while (next != "done")
 	{
