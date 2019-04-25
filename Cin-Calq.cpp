@@ -23,9 +23,14 @@ int main()
 	list<Mob> heatl;//list of mobs/heroes that get populated into the heat
 	map<string, vector<Mob>> quests;
 	populate(enemyline, selfa, upperlimits, lowerlimits, heatl, quests, Heromap);//Fills enemy line, and fills the heat, which is the list of mobs to choose from, with the upper and lower limits on followers
+	enemyi = enemyline.getLine();
 	if (choice == "Promotion")
 	{
 		getPromotional(heatl, selfa, upperlimits, lowerlimits, enemyline, idh);
+	}
+	else if ((enemyi.size() == 1) && (enemyi[0].getDefense() == INT_MAX))
+	{
+		getWorldBoss(heatl, selfa, upperlimits, lowerlimits, enemyline);
 	}
 	else getResult(heatl, selfa, upperlimits, lowerlimits, enemyline);//Tries combinations of units and heroes to beat the input enemy line in setup.txt. If a solution is found, it prints it.
 	cout << "Would you like to run this program again? Enter [y/n]\n";

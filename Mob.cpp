@@ -2045,12 +2045,8 @@ namespace jmcclain1299
 void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line enemyl)
 {
 	list<Mob>::iterator j = heat.begin(), k = heat.begin(), l = heat.begin(), m = heat.begin(),//iterators for iteratiing through the list
-		n = heat.begin(), o = heat.begin(), oe = heat.end(), me = heat.end(), ne = heat.end(),
-		le = heat.end(), ke = heat.end(), je = heat.end();//end iterators are for a stopping condition
-	je--, ke--, oe--, me--, ne--, le--; //pointing the iterators the last mob, a few steps faster than ending all the for loops
-	j++;//priming j
+		n = heat.begin(), o = heat.begin();//pointing the iterators the last mob, a few steps faster than ending all the for loops
 	vector<Mob> self = { *j, *k, *l, *m, *n, *o };//first combination
-	string dup = "nop";//to check for duplicate hero, an invalid condition
 	string won = "no";//a flag for stopping, will optimize at a later point
 	char ans = 'y';//to continue iteration to 5/6 mobs
 	int a = 1, b = 1;//a flag to determing if the user wanted to continue or not
@@ -2074,7 +2070,7 @@ void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line 
 								{
 									j++;//move to next mob in the list
 									if (j == heat.end())//if j is at the end, move out of this for loop into the next one, incrementing the k iterator up one
-										break;
+										goto donej;
 									goto redo;//try again from the redo flag
 								}
 								if (self[1].getId() < -1)//if k points at a hero
@@ -2115,90 +2111,58 @@ void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line 
 								selfl = self;//make a line out of the self vector
 								if (doBattle(selfl, enemyl))//Returns 1 if the first line is alive and the second one is not, which is the only winning condition I am concerned with for this exercise. 
 								{
-									doBattle(selfl, enemyl);
 									won = "won";//flag that a battle has been one. This will be optimized later with a goto flag
 									break;
 								}
 							}
 							j++;//increments j up if the battle isn't won
 						}
+						donej:
 						if (won == "won")
 							break;
-						if (j == heat.end())//resets j
 							j = heat.begin();
-						do {
-
-							dup = "nop";//flag to restart the do loop if k is a duplicate 
+						redok:
 							k++;
-							if (k != heat.end())//to make sure that nothing is broken
-								self[1] = *k;
+							if (k == heat.end())
+								goto donek;
+							self[1] = *k;
 							if (self[1].getId() < -1)//check for duplications
 							{
 								if (k == l || k == m || k == n || k == o)
-									dup = "dup";//sets flag if duplicate
+									goto redok;
 							}
-							if (k == heat.end())//if k's done, reset it and increment l
-							{
-								k = heat.begin();
-								goto donek;
-							}
-						} while (dup == "dup");//while condintion is invalid
 					}
 				donek://same thing as k, but for l
 					if (won == "won")
 						break;
-					if (k == heat.end())
-						k = heat.begin();
-					do {
-						l++;
-						dup = "nop";
-						if (l != heat.end())
+					k = heat.begin();
+				redol:
+					l++;
+					if (l != heat.end())
+						goto donel;
 							self[2] = *l;
 						if (self[2].getId() < -1)
 						{
 							if (l == m || l == n || l == o)
-								dup = "dup";
+								goto redol;
 						}
-						if (l == heat.end())
-						{
-							l = heat.begin();
-							goto donel;
-						}
-					} while (dup == "dup");
 				}
 			donel://same for m
 				if (won == "won")
 					break;
-				if (l == heat.end())
 					l = heat.begin();
-				do {
+				redom:
 					m++;
-					dup = "nop";
 					if (m != heat.end())
+						goto donem;
 						self[3] = *m;
 					if (self[3].getId() < -1)
 					{
 						if (m == n || m == o)
-							dup = "dup";
+							goto redom;
 					}
-					if (m == heat.end())
-					{
-						m = heat.begin();
-						if (n == heat.end())//minor optimization to cut out a few steps if these conditions had already been met.
-						{
-							n == heat.begin();
-							goto donen;
-							if (o == heat.end())
-								goto doneo;
-						}
-						goto donem;//incremement n...
-						break;
-					}
-				} while (dup == "dup");
 			}
 		donem://same for m, but now for n
-			if (ans == 'n')
-				break;
 			if (won == "won")
 				break;
 			if (a == 0)// a check for increasing the difficulty of solution and decreasing of rewards.
@@ -2213,24 +2177,18 @@ void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line 
 				}
 				a = 1;//either way, the player doesn't need to be asked if they want to continue on every loop, there are a few hundred thousand per heat
 			}
-			if (m == heat.end())
+			m = heat.begin();
+			redon:
 				m = heat.begin();
-			do {
 				n++;
-				dup = "nop";
-				if (n != heat.end())
+				if (n == heat.end())
+					goto donen;
 					self[4] = *n;
 				if (self[4].getId() < -1)
 				{
 					if (n == o)
-						dup = "dup";
+						goto redon;
 				}
-				if ((n == heat.end()) && (dup == "dup"))
-				{
-					n = heat.begin();
-					goto donen;
-				}
-			} while (dup == "dup");
 		}
 	donen://same as n, now for o
 		if (won == "won")
@@ -2249,13 +2207,10 @@ void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line 
 			}
 			b = 1;
 		}
-		if ((o == oe) && (m == me) && (n == ne) && (l == le) && (k == ke) && (j == je))//if everything is pointing to the last valid combination, move on
-			break;
-		if (won == "won")
-			break;
-		if (n == heat.end())
 			n = heat.begin();
 		o++;
+		if (o == heat.end())
+			goto doneo;
 	}
 doneo://once done trying all solutions/finding a winning solution
 
@@ -2366,6 +2321,234 @@ doneo://once done trying all solutions/finding a winning solution
 	xy << "]},\"time\":0,\"fights\":0,\"replay\":\"" << y << "\"}}";
 	cout << xy.str();
 	cout << endl;
+}
+void getWorldBoss(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line enemyl)
+{
+	list<Mob>::iterator j = heat.begin(), k = heat.begin(), l = heat.begin(), m = heat.begin(),//iterators for iteratiing through the list
+		n = heat.begin(), o = heat.begin();//pointing the iterators the last mob, a few steps faster than ending all the for loops
+	heat.erase(heat.begin());
+	heat.insert(heat.begin(), a1);
+	vector<Mob> self = { *j, *k, *l, *m, *n, *o };//first combination
+	int damagedone = 0;
+	for (o; o != heat.end();)//self[6] iterator
+	{
+		for (n; n != heat.end();)//self[5] iterator
+		{
+			for (m; m != heat.end();)//self[4] iterator
+			{
+				for (l; l != heat.end();)//self[3] iterator
+				{
+					for (k; k != heat.end();)//self[2] iterator
+					{
+						for (j; j != heat.end();)//self[1] iterator
+						{
+						redo: //a flag to restart the sequence if a duplicate was found
+							self = { *j, *k, *l, *m, *n, *o }; // creats a vector out of the iterated mobs
+							if (self[0].getId() < -1) //if the 1st index is a hero
+							{
+								if (j == k || j == l || j == m || j == n || j == o)//if the id matches any others, same as asking if the iterators are pointing at the same thing
+								{
+									j++;//move to next mob in the list
+									if (j == heat.end())//if j is at the end, move out of this for loop into the next one, incrementing the k iterator up one
+										goto donej;
+									goto redo;//try again from the redo flag
+								}
+								if (self[1].getId() < -1)//if k points at a hero
+									if (k == l || k == m || k == n || k == o)//if k is equal to another iterator, meaning same hero is referenced...
+									{
+										k++;//move k iterator up...
+										if (k == heat.end())
+											goto donek;// move k/l iterators up, and tryagain if k's not done
+										goto redo;
+									}
+								if (self[2].getId() < -1)//same thing for l
+									if (l == m || l == n || l == o)
+									{
+										l++;
+										if (l == heat.end())
+											goto donel;
+										goto redo;
+									}
+								if (self[3].getId() < -1)//same for m
+									if (m == n || m == o)
+									{
+										m++;
+										if (m == heat.end())
+											goto donem;
+										goto redo;
+									}
+								if (self[4].getId() < -1)//same for n
+									if (n == o)
+									{
+										n++;
+										if (n == heat.end())
+											goto donen;
+										goto redo;
+									}
+							}
+							if (((selfl.lineFollowers < upperlimit) && (selfl.lineFollowers > lowerlimit)) || (selfl.lineFollowers == 0))//if the line is within the paramaters for upper and lower limits
+							{
+								selfl = self;//make a line out of the self vector
+								(doBattle(selfl, enemyl));//Returns 1 if the first line is alive and the second one is not, which is the only winning condition I am concerned with for this exercise. 
+								if (selfl.totaldamage > damagedone)
+									damagedone = selfl.totaldamage;
+							}
+							j++;//increments j up if the battle isn't won
+						}
+					donej:
+						j = heat.begin();
+					redok:
+						k++;
+						if (k == heat.end())
+							goto donek;
+						self[1] = *k;
+						if (self[1].getId() < -1)//check for duplications
+						{
+							if (k == l || k == m || k == n || k == o)
+								goto redok;
+						}
+					}
+				donek://same thing as k, but for l
+					k = heat.begin();
+				redol:
+					l++;
+					if (l != heat.end())
+						goto donel;
+					self[2] = *l;
+					if (self[2].getId() < -1)
+					{
+						if (l == m || l == n || l == o)
+							goto redol;
+					}
+				}
+			donel://same for m
+				l = heat.begin();
+			redom:
+				m++;
+				if (m != heat.end())
+					goto donem;
+				self[3] = *m;
+				if (self[3].getId() < -1)
+				{
+					if (m == n || m == o)
+						goto redom;
+				}
+			}
+		donem://same for m, but now for n
+			m = heat.begin();
+		redon:
+			m = heat.begin();
+			n++;
+			if (n == heat.end())
+				goto donen;
+			self[4] = *n;
+			if (self[4].getId() < -1)
+			{
+				if (n == o)
+					goto redon;
+			}
+		}
+	donen://same as n, now for o
+		n = heat.begin();
+		o++;
+		if (o == heat.end())
+			goto doneo;
+	}
+	doneo://once done trying all solutions/finding a winning solution
+		cout << "Most damaging line: \n";
+		for (int i = (self.size() - 1); i > -1; i--)
+		{
+			cout << self[i].getName();
+			if (i == 0)
+				break;
+			cout << ", ";
+		}
+		cout << endl;
+		stringstream x;
+		vector<Mob> v = selfl.getLine();
+		vector<Mob> h;
+		vector<Mob> e = enemyl.getLine();
+		vector<Mob> eh;
+		for (int i = 0; i < v.size(); i++)
+		{
+			if (v[i].getSkillName() != "mob")
+				h.push_back(v[i]);
+		}
+		for (int i = 0; i < e.size(); i++)
+		{
+			if (e[i].getSkillName() != "mob")
+				eh.push_back(e[i]);
+		}
+
+		x << "{\"setup\":[";
+		for (int i = 0; i < selfl.lineIds.size(); i++)
+		{
+			x << selfl.lineIds[i];
+			if (i < selfl.lineIds.size() - 1)
+				x << ",";
+		}
+		x << "],\"shero\":{";
+		for (int i = 0; i < h.size(); i++)
+		{
+			x << "\"" << (abs(h[i].getId()) - 2) << "\":" << h[i].getLevel();
+			if (i != h.size() - 1)
+				x << ",";
+		}
+		x << "},\"spromo\":{";
+		for (int i = 0; i < h.size(); i++)
+		{
+			x << "\"" << (abs(h[i].getId()) - 2) << "\":" << h[i].getPromotion();
+			if (i != h.size() - 1)
+				x << ",";
+		}
+		x << "},\"player\":[";
+		for (int i = 0; i < enemyl.lineIds.size(); i++)
+		{
+			x << enemyl.lineIds[i];
+			if (i < enemyl.lineIds.size() - 1)
+				x << ",";
+		}
+		x << "],\"phero\":{";
+		for (int i = 0; i < eh.size(); i++)
+		{
+			x << "\"" << (abs(eh[i].getId()) - 2) << "\":" << eh[i].getLevel();
+			if (i != eh.size() - 1)
+				x << ",";
+		}
+		x << "},\"ppromo\":{";
+		for (int i = 0; i < eh.size(); i++)
+		{
+			x << "\"" << (abs(eh[i].getId()) - 2) << "\":" << eh[i].getPromotion();
+			if (i != eh.size() - 1)
+				x << ",";
+		}
+		x << "}}";
+		string unencoded = x.str();
+		string y = base64_encode((const unsigned char*)unencoded.c_str(), (int)unencoded.size());
+		ostringstream xy;
+		xy << "{\"validSolution\":\"bossdamage\":"<< selfl.totaldamage <<",{\"target\":{\"followers\":" << enemyl.lineFollowers << ",\"monsters\":[";
+		for (int i = 0; i < e.size(); i++)
+		{
+			xy << "{\"id\":" << e[i].getId();
+			if (e[i].getId() < -1)
+				xy << ",\"level\":" << e[i].getLevel();
+			xy << "}";
+			if (i < e.size() - 1)
+				xy << ",";
+		}
+		xy << "]},\"solution\":{\"followers\":" << selfl.lineFollowers << ",\"monsters\":[";
+		for (int i = 0; i < v.size(); i++)
+		{
+			xy << "{\"id\":" << v[i].getId();
+			if (v[i].getId() < -1)
+				xy << ",\"level\":" << v[i].getLevel();
+			xy << "}";
+			if (i < v.size() - 1)
+				xy << ",";
+		}
+		xy << "]},\"time\":0,\"fights\":0,\"replay\":\"" << y << "\"}}";
+		cout << xy.str();
+		cout << endl;
 }
 string base64_encode(BYTE const* buf, unsigned int bufLen) {
 	std::string ret;

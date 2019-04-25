@@ -761,6 +761,7 @@ namespace jmcclain1299//Namespace for Mob functions
 	bool anyDead(vector<Mob> line, vector<Mob> line2);//checks if any mobs in the line have hp <=0
 	void getResult(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line enemyl);//returns wether or not a winner was found
 	void getPromotional(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line enemyl, int id);
+	void getWorldBoss(list<Mob> heat, Line selfl, int upperlimit, int lowerlimit, Line enemyl);
 	typedef unsigned char BYTE;
 	static string base64_chars =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
