@@ -1,4 +1,3 @@
-A major sidenote: After this program passes beta, Alya's calc will be phased out and support will no longer continue. I don't know when that will be, but she has indicated that she no longer wishes to continue development once she feels that this calc has reached the level of the current calc. It is up to her to make that judgement, and she will continue updating old calc until that point is reached. If you need a definite timeframe, I expect this calc to be fully operational no later than mid may, if it is not done by then I am taking a week off of work in the last week of may and will finalize any coding at that point. If you have any suggestions for what you'd like to see, send jmcclain1299@gmail.com an email with suggestions. I'll try to work with you to implement what you'd like to see.
 
 This is an open beta for a new calc that is based on the new battle system and has suppost for 2nd promotion quests. Has support for signifying quest/promotion in setup.txt. 
 
