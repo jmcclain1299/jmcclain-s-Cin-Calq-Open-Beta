@@ -8,14 +8,13 @@ pokerface 99.4
 done //use "done" when through entering heroes
 0//lower follower limit
 0//upper follower limit, the closer they are and the fewer heroes,
-f30//the faster the output. start putting enemy units here.
-shaman 1000//use hero level/hero level.promotion for heroes
-nicte 1000//use f1-30, e1-30, a1-30, w1-30 for mobs
-ignitor 1000
-neil 1000
+f30//the faster the output. start putting enemy units here.\\ You can start by saying Quest quest1 or quest2 or whatvers
+shaman 1000//use hero level/hero level.promotion for heroes\\or Promotion heroname, all lowercase, to solve that heroes promo quest
+nicte 1000//use f1-30, e1-30, a1-30, w1-30 for mobs\\I think it has a check for worldboss, not sure if it's working.
+ignitor 1000                                        \\It does check if the line size is 1 for a wb solution, but theoretically
+neil 1000                                           \\A wb can be in a dungeon/dq.  Use done when done in any event.
 done // use done when done
 //there are no checks for valid lineups of oddball sizes
-// or worldboss implementation at this time. There will be later.
 //Send jmcclain1299 a private message for any requests for implementations
-//Send Alya_N/Jmcclain1299 any bug reports
+//Send jmcclain1299@gmail.com bug reports including a replay and your setup.txt so I know what to fix
 //If a hero name is mispelled, the program will crash. this will be fixed later.
